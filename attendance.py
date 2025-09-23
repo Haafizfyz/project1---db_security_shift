@@ -151,9 +151,9 @@ class Attendance:
         if not record:
             # If no check-in record exists, create a new record with only check_out
             query = "INSERT INTO attendance (staff_id, date, check_out, status) VALUES (%s, %s, %s, %s)"
-            self.db.execute(query, (staff_id, today_date, now_time, None))  # Insert record
+            self.db.execute(query, (staff_id, today_date, now_time, 'absent'))  # Insert record
             self.db.commit()  # Commit changes to DB
-            print("No check-in record found, but check-out has been saved.")  # Success message
+            print("No check-in record found, but check-out has been saved status ABSENT.")  # Success message
             return
 
         # Update check_out for existing attendance

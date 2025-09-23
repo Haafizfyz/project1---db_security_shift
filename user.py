@@ -58,4 +58,3 @@ class User:
         """Validasi login user"""
         query = "SELECT * FROM user WHERE username=%s AND password=%s"  # Query untuk cek username & password
         return self.db.fetch_one(query, (username, password))           # Eksekusi query dan ambil 1 record
-

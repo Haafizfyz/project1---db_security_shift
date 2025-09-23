@@ -57,9 +57,11 @@ create table attendance (
 CREATE TABLE user (
     user_id INT AUTO_INCREMENT PRIMARY KEY,         -- id unik user
     username VARCHAR(50) NOT NULL UNIQUE,           -- username untuk login
-    password VARCHAR(255) NOT NULL,                 -- password (disarankan hash)
+    password VARCHAR(255) NOT NULL,                 -- password
     role ENUM('admin','staff') NOT NULL,            -- peran user
     staff_id INT,                                   -- relasi ke satpam (jika role = staff)
     FOREIGN KEY (staff_id) REFERENCES security_staff(staff_id)
 );
+
+
 

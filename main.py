@@ -408,17 +408,21 @@ def manage_user():  # Fungsi untuk mengelola user login
             print("Invalid choice")  # Pesan error
 
 # ============= STAFF MENU FUNCTION (dummy) =============
-def view_my_schedule(staff_id):  # Fungsi untuk menampilkan jadwal staff tertentu
-    print("\n--- My Schedule ---")  # Judul
-    data = schedule.read_schedule()  # Ambil semua schedule
-    has_schedule = False  # Flag untuk cek ada jadwal atau tidak
-    for row in data:  # Loop tiap jadwal
-        if row["staff_id"] == staff_id:  # Cek apakah jadwal milik staff ini
-            print(row)  # Tampilkan jadwal
-            has_schedule = True  # Tandai bahwa ada jadwal
-    if not has_schedule:  # Kalau tidak ada jadwal
-        print("No schedule available for you.")  # Pesan bahasa Inggris
-    input("\nPress Enter to return...")  # Pause sebelum balik ke menu
+def view_my_schedule(staff_id):
+    print("\n--- My Schedule ---")  
+    # ambil jadwal langsung berdasarkan staff_id
+    data = schedule.read_schedule(staff_id)  
+    
+    # cek kalau ga ada jadwal
+    if not data:
+        print("No schedule available for you.")  
+    else:
+        # kalau ada, tampilkan satu per satu
+        for row in data:
+            print(row)
+    
+    # pause biar user bisa lihat hasil sebelum balik ke menu
+    input("\nPress Enter to return...")  
 
 def check_in(staff_id):  # Fungsi interface untuk check-in staff
     print("\n--- Check In ---")  # Judul menu check-in

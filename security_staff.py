@@ -53,4 +53,3 @@ class SecurityStaff:
          self.db.execute(query, (staff_id,))  # Eksekusi query dengan parameter staff_id
          self.db.commit()  # Commit perubahan ke database
          print(f"Staff with ID {staff_id} successfully deleted.")  # Cetak pesan sukses
-

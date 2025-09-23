@@ -31,16 +31,8 @@ class Schedule:
          self.db.commit()  # Commit perubahan ke database
          print(f"Schedule for staff {staff_id}, shift {shift_id} on {day_of_week} has been added.")  # Cetak konfirmasi sukses
 
-
-    def create_schedule(self, staff_id, shift_id, day_of_week):  # Fungsi untuk menambahkan jadwal baru
-         """Add a new schedule"""
-         query = "INSERT INTO schedule (staff_id, shift_id, day_of_week) VALUES (%s, %s, %s)"  # SQL query insert
-         self.db.execute(query, (staff_id, shift_id, day_of_week))  # Eksekusi query dengan parameter
-         self.db.commit()  # Commit perubahan ke database
-         print(f"Schedule for staff {staff_id}, shift {shift_id} on {day_of_week} has been added.")  # Cetak konfirmasi sukses
-
     
-    def read_schedule_by_staff(self, staff_id):  # Fungsi untuk mengambil jadwal khusus untuk satu staff
+    def read_schedule(self, staff_id):  # Fungsi untuk mengambil jadwal khusus untuk satu staff
          """Get schedule for a specific staff"""
          query = """
          SELECT s.schedule_id, sh.shift_name, sh.start_time, sh.end_time, s.day_of_week
@@ -87,4 +79,3 @@ class Schedule:
         self.db.execute(query, (schedule_id,))  # Eksekusi query dengan parameter schedule_id
         self.db.commit()  # Commit perubahan ke database
         print(f"Schedule with ID {schedule_id} successfully deleted")  # Tampilkan pesan sukses
-

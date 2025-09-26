@@ -31,34 +31,34 @@ class Shift:
         formatted.append(row)  # Tambahkan row yang sudah diformat ke list
      return formatted  # Kembalikan list yang berisi semua shift dengan waktu yang sudah diformat
 
-def update_shift(self, shift_id, shift_name=None, start_time=None, end_time=None):  # Method untuk update data shift, bisa update 1 field saja
-     """Update shift, can update one or more fields"""  # Docstring menjelaskan fungsi method
-     fields = []  # List untuk menampung field yang akan diupdate
-     values = []  # List untuk menampung nilai baru dari field yang diupdate
+    def update_shift(self, shift_id, shift_name=None, start_time=None, end_time=None):  # Method untuk update data shift, bisa update 1 field saja
+        """Update shift, can update one or more fields"""  # Docstring menjelaskan fungsi method
+        fields = []  # List untuk menampung field yang akan diupdate
+        values = []  # List untuk menampung nilai baru dari field yang diupdate
 
-     if shift_name:  # Jika parameter shift_name diberikan
-         fields.append("shift_name=%s")  # Tambahkan ke list fields
-         values.append(shift_name)  # Tambahkan nilai baru ke list values
-     if start_time:  # Jika parameter start_time diberikan
-         fields.append("start_time=%s")
-         values.append(start_time)
-     if end_time:  # Jika parameter end_time diberikan
-         fields.append("end_time=%s")
-         values.append(end_time)
+        if shift_name:  # Jika parameter shift_name diberikan
+            fields.append("shift_name=%s")  # Tambahkan ke list fields
+            values.append(shift_name)  # Tambahkan nilai baru ke list values
+        if start_time:  # Jika parameter start_time diberikan
+            fields.append("start_time=%s")
+            values.append(start_time)
+        if end_time:  # Jika parameter end_time diberikan
+            fields.append("end_time=%s")
+            values.append(end_time)
 
-     if not fields:  # Jika tidak ada field yang diberikan
-         print("No field to update.")  # Tampilkan pesan
-         return  # Keluar dari method
+        if not fields:  # Jika tidak ada field yang diberikan
+            print("No field to update.")  # Tampilkan pesan
+            return  # Keluar dari method
 
-     query = f"UPDATE shift SET {', '.join(fields)} WHERE shift_id=%s"  # Buat query SQL dinamis
-     values.append(shift_id)  # Tambahkan shift_id ke tuple values untuk kondisi WHERE
+        query = f"UPDATE shift SET {', '.join(fields)} WHERE shift_id=%s"  # Buat query SQL dinamis
+        values.append(shift_id)  # Tambahkan shift_id ke tuple values untuk kondisi WHERE
 
-     self.db.execute(query, tuple(values))  # Eksekusi query dengan values
-     self.db.commit()  # Commit perubahan ke database
-     print("Shift updated successfully.")  # Tampilkan pesan sukses
+        self.db.execute(query, tuple(values))  # Eksekusi query dengan values
+        self.db.commit()  # Commit perubahan ke database
+        print("Shift updated successfully.")  # Tampilkan pesan sukses
 
-def delete_shift(self, shift_id):  # Method untuk menghapus shift berdasarkan shift_id
-     query = "DELETE FROM shift WHERE shift_id=%s"  # SQL query untuk menghapus shift tertentu
-     self.db.execute(query, (shift_id,))  # Eksekusi query dengan parameter shift_id
-     self.db.commit()  # Commit perubahan ke database
-     print("Shift deleted successfully.")  # Tampilkan pesan sukses
+    def delete_shift(self, shift_id):  # Method untuk menghapus shift berdasarkan shift_id
+        query = "DELETE FROM shift WHERE shift_id=%s"  # SQL query untuk menghapus shift tertentu
+        self.db.execute(query, (shift_id,))  # Eksekusi query dengan parameter shift_id
+        self.db.commit()  # Commit perubahan ke database
+        print("Shift deleted successfully.")  # Tampilkan pesan sukses

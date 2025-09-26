@@ -18,65 +18,93 @@ insert into shift(shift_name, start_time, end_time) values
 
 -- ====================================
 -- Data dummy untuk schedule
-insert into schedule (staff_id, shift_id, day_of_week) values
--- ===== MONDAY =====
-(1, 1, 'monday'),   -- Budi masuk shift Morning
-(2, 2, 'monday'),   -- Andi masuk shift Night
+INSERT INTO schedule (staff_id, shift_id, day_of_week) VALUES
+-- Monday
+(1, 1, 'Monday'),
+(2, 1, 'Monday'),
+(3, 2, 'Monday'),
+(4, 2, 'Monday'),
 
--- ===== TUESDAY =====
-(3, 1, 'tuesday'),  -- Rudi masuk shift Morning
-(4, 2, 'tuesday'),  -- Agus masuk shift Night
+-- Tuesday
+(17, 1, 'Tuesday'),
+(18, 1, 'Tuesday'),
+(1, 2, 'Tuesday'),
+(2, 2, 'Tuesday'),
 
--- ===== WEDNESDAY =====
-(1, 1, 'wednesday'), -- Budi masuk shift Morning
-(3, 2, 'wednesday'), -- Rudi masuk shift Night
+-- Wednesday
+(3, 1, 'Wednesday'),
+(4, 1, 'Wednesday'),
+(17, 2, 'Wednesday'),
+(18, 2, 'Wednesday'),
 
--- ===== THURSDAY =====
-(2, 1, 'thursday'), -- Andi masuk shift Morning
-(4, 2, 'thursday'), -- Agus masuk shift Night
+-- Thursday
+(1, 1, 'Thursday'),
+(2, 1, 'Thursday'),
+(3, 2, 'Thursday'),
+(4, 2, 'Thursday'),
 
--- ===== FRIDAY =====
-(1, 1, 'friday'),   -- Budi masuk shift Morning
-(2, 2, 'friday'),   -- Andi masuk shift Night
+-- Friday
+(17, 1, 'Friday'),
+(18, 1, 'Friday'),
+(1, 2, 'Friday'),
+(2, 2, 'Friday'),
 
--- ===== SATURDAY =====
-(3, 1, 'saturday'), -- Rudi masuk shift Morning
-(4, 2, 'saturday'), -- Agus masuk shift Night
+-- Saturday
+(3, 1, 'Saturday'),
+(4, 1, 'Saturday'),
+(17, 2, 'Saturday'),
+(18, 2, 'Saturday'),
 
--- ===== SUNDAY =====
-(1, 1, 'sunday'),   -- Budi masuk shift Morning
-(4, 2, 'sunday');   -- Agus masuk shift Night
+-- Sunday
+(1, 1, 'Sunday'),
+(2, 1, 'Sunday'),
+(3, 2, 'Sunday'),
+(4, 2, 'Sunday');
 
 -- ====================================
 -- Data dummy untuk attendance
-insert into attendance (staff_id, date, check_in, check_out, status) values
--- Monday (2025-09-08)
-(1, '2025-09-08', '07:02:00', '19:01:00', 'present'),   -- Budi hadir shift pagi
-(2, '2025-09-08', '19:05:00', '07:01:00', 'late'),      -- Andi telat masuk shift malam
+INSERT INTO attendance (staff_id, date, check_in, check_out, status) VALUES
+-- Monday (2025-09-22)
+(1, '2025-09-22', '07:02:00', '19:01:00', 'present'),   
+(2, '2025-09-22', '19:05:00', '07:01:00', 'late'),      
+(3, '2025-09-22', NULL, NULL, 'absent'),                
+(4, '2025-09-22', '07:00:00', '19:02:00', 'present'),   
 
--- Tuesday (2025-09-09)
-(3, '2025-09-09', '07:00:00', '19:00:00', 'present'),   -- Rudi hadir shift pagi
-(4, '2025-09-09', '19:00:00', '07:00:00', 'present'),   -- Agus hadir shift malam
+-- Tuesday (2025-09-23)
+(17, '2025-09-23', '07:01:00', '19:00:00', 'present'),  
+(18, '2025-09-23', '19:00:00', '07:02:00', 'present'),  
+(1, '2025-09-23', NULL, NULL, 'absent'),                
+(2, '2025-09-23', '07:10:00', '19:05:00', 'late'),      
 
--- Wednesday (2025-09-10)
-(1, '2025-09-10', '07:10:00', '19:00:00', 'late'),      -- Budi telat masuk shift pagi
-(3, '2025-09-10', '19:00:00', '07:00:00', 'present'),   -- Rudi hadir shift malam
+-- Wednesday (2025-09-24)
+(3, '2025-09-24', '07:00:00', '19:00:00', 'present'),
+(4, '2025-09-24', '19:02:00', '07:01:00', 'present'),
+(17, '2025-09-24', '07:20:00', '19:15:00', 'late'),
+(18, '2025-09-24', NULL, NULL, 'absent'),
 
--- Thursday (2025-09-11)
-(2, '2025-09-11', '07:00:00', '19:00:00', 'present'),   -- Andi hadir shift pagi
-(4, '2025-09-11', '19:00:00', '07:00:00', 'present'),   -- Agus hadir shift malam
+-- Thursday (2025-09-25)
+(1, '2025-09-25', '07:00:00', '19:00:00', 'present'),
+(2, '2025-09-25', '19:01:00', '07:00:00', 'present'),
+(3, '2025-09-25', '07:15:00', '19:10:00', 'late'),
+(4, '2025-09-25', '19:02:00', '07:02:00', 'present'),
 
--- Friday (2025-09-12)
-(1, '2025-09-12', '07:00:00', '19:00:00', 'present'),   -- Budi hadir shift pagi
-(2, '2025-09-12', '19:15:00', '07:00:00', 'late'),      -- Andi telat shift malam
+-- Friday (2025-09-26)
+(17, '2025-09-26', NULL, NULL, 'absent'),
+(18, '2025-09-26', '19:01:00', '07:00:00', 'present'),
+(1, '2025-09-26', '07:01:00', '19:00:00', 'present'),
+(2, '2025-09-26', '19:20:00', '07:05:00', 'late'),
 
--- Saturday (2025-09-13)
-(3, '2025-09-13', '07:00:00', '19:00:00', 'present'),   -- Rudi hadir shift pagi
-(4, '2025-09-13', '19:00:00', '07:00:00', 'present'),   -- Agus hadir shift malam
+-- Saturday (2025-09-27)
+(3, '2025-09-27', NULL, NULL, 'absent'),
+(4, '2025-09-27', '19:00:00', '07:02:00', 'present'),
+(17, '2025-09-27', '07:00:00', '19:00:00', 'present'),
+(18, '2025-09-27', '19:15:00', '07:10:00', 'late'),
 
--- Sunday (2025-09-14)
-(1, '2025-09-14', '07:00:00', '19:00:00', 'present'),   -- Budi hadir shift pagi
-(4, '2025-09-14', '19:00:00', null, 'absent');          -- Agus absen shift malam
+-- Sunday (2025-09-28)
+(1, '2025-09-28', '07:02:00', '19:00:00', 'present'),
+(2, '2025-09-28', '19:00:00', '07:02:00', 'present'),
+(3, '2025-09-28', '07:01:00', '19:01:00', 'present'),
+(4, '2025-09-28', NULL, NULL, 'absent');
 
 -- ====================================
 -- Data dummy untuk user
@@ -86,6 +114,8 @@ insert into user (username, password, role, staff_id) values
 ('andi', 'andi123', 'staff', 2),       -- akun untuk staff Andi
 ('rudi', 'rudi123', 'staff', 3),       -- akun untuk staff Rudi
 ('agus', 'agus123', 'staff', 4);       -- akun untuk staff Agus
+('bambang', 'bambang123', 'staff', 17); -- akun untuk staff Bambang
+('rizky', 'rizky123', 'staff', 18); -- akun untuk staff Rizky
 
 use db_security_shift;
 select * from security_staff;
@@ -96,5 +126,14 @@ select * from shift;
 select * from user;
 
 use db_security_shift;
-DELETE FROM shift 
+DELETE FROM schedule;
 WHERE shift_id BETWEEN 4 AND 5;
+
+use db_security_shift;
+INSERT INTO security_staff (name, age, contact)
+VALUES 
+('Bambang susanto', 32, '081234567891'),
+('Rizky abdullah', 29, '081234567892');
+
+use db_security_shift;
+TRUNCATE TABLE attendance;

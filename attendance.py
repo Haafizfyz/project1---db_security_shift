@@ -161,3 +161,11 @@ class Attendance:
         self.db.execute(query, (now_time, record["attendance_id"]))  # Execute update
         self.db.commit()  # Commit changes to DB
         print("Check-out successful.")  # Success message
+
+    def search_by_date(self, date):
+        """Cari data attendance berdasarkan tanggal tertentu"""
+        query = "SELECT a.attendance_id, s.name AS staff_name, a.date, a.check_in, a.check_out, a.status \
+                 FROM attendance a \
+                 JOIN security_staff s ON a.staff_id = s.staff_id \
+                 WHERE a.date = %s"
+        return self.db.fetch_all(query, (date,))

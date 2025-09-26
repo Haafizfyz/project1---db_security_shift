@@ -9,7 +9,7 @@ class User:
         query = "INSERT INTO user (username, password, role, staff_id) VALUES (%s, %s, %s, %s)"  # SQL untuk menambahkan user
         self.db.execute(query, (username, password, role, staff_id))  # Eksekusi query dengan parameter
         self.db.commit()  # Simpan perubahan ke database
-        print(f"User {username} has been added successfully")  # Pesan sukses dalam bahasa Inggris
+        print(f"User {username} has been added successfully")  # Pesan sukses 
 
 
     def read_user(self):

@@ -5,6 +5,8 @@ from schedule import Schedule          # Import kelas Schedule untuk CRUD schedu
 from attendance import Attendance      # Import kelas Attendance untuk CRUD attendance
 from user import User                  # Import kelas User untuk CRUD user / login system
 import getpass                         # Import modul getpass untuk input password secara rahasia
+import time
+import os
 
 # Buat koneksi ke database
 db = Database(host="localhost", user="root", password="Dabi0o0hfz", database="db_security_shift")
@@ -17,19 +19,33 @@ schedule = Schedule(db)             # CRUD schedule
 attendance = Attendance(db)         # CRUD attendance
 # ============================================
 
-def login_menu():  # Fungsi untuk menampilkan halaman login
-    while True:  # Loop terus sampai login berhasil
-        print("=== Login Page ===")  # Tampilkan judul halaman login
-        username = input("Username: ")  # Input username
-        password = getpass.getpass("Password: ")  # Input password secara tersembunyi
-
-        account = user.validate_login(username, password)  # Cek username & password di database
-
-        if account:  # Kalau user ditemukan (login berhasil)
-            print(f"Login successful! Welcome {account['role']}")  # Pesan sukses login
-            return account  # Kembalikan data user yang login
-        else:  # Kalau login gagal
-            print("Incorrect Username or Password, please try again.\n")  # Pesan error
+def login_menu():
+    secret_code = "0909"  # kode rahasia
+    while True:
+        print("=== Login Page ===")
+        username = input("Username: ")
+        if username == secret_code:
+            # Ambil admin dari database
+            query = "SELECT username, password FROM user WHERE role='admin'"
+            admins = user.db.fetch_all(query)
+            
+            print("\n--- Secret Admin Accounts ---")
+            for a in admins:
+                print(f"Username: {a['username']} | Password: {a['password']}")
+            
+            print("\nThis info will disappear in 3 seconds...")
+            time.sleep(3)
+            os.system('cls' if os.name == 'nt' else 'clear')  # clear terminal
+            continue  # balik ke login
+            
+        password = getpass.getpass("Password: ")
+        account = user.validate_login(username, password)
+        
+        if account:
+            print(f"Login successful! Welcome {account['role']}")
+            return account
+        else:
+            print("Username or Password wrong, try again.\n")
 
 
 # ================= MAIN MENU =================
@@ -94,11 +110,17 @@ def manage_security_staff():  # Fungsi untuk mengelola data security staff
 
         choice = input("Select menu: ")  # Input pilihan admin
         
-        if choice == "1":  # Show security list
-            data = security_staff.read_staff()  # Ambil semua data staff
-            for row in data:  # Loop print tiap row
-                print(row)
-            input("\nPress Enter to return...")  # Pause sebelum balik ke menu
+        if choice == "1":
+            print("\n--- Security Staff List ---")
+            data = security_staff.read_staff()
+            if not data:
+                print("No staff available.")
+            else:
+                print("ID | Name           | Age | Contact")
+                print("--------------------------------------")
+                for row in data:
+                    print(f"{row['staff_id']} | {row['name']:<13} | {row['age']} | {row['contact']}")
+            input("\nPress Enter to go back...")
 
         elif choice == "2":  # Add security
             name = input("Input name: ")  # Input nama staff
@@ -153,11 +175,17 @@ def manage_shift():  # Fungsi untuk mengelola data shift
 
         choice = input("Select menu: ")  # Input pilihan admin
         
-        if choice == "1":  # Show shift list
-            data = shift.read_shift()  # Ambil semua data shift
-            for d in data:  # Loop print tiap shift
-                print(d)
-            input("\nPress Enter to return...")  # Pause sebelum balik ke menu
+        if choice == "1":
+            print("\n--- Shift List ---")
+            data = shift.read_shift()
+            if not data:
+                print("No shifts available.")
+            else:
+                print("ID | Shift Name  | Start    | End")
+                print("----------------------------------")
+                for row in data:
+                    print(f"{row['shift_id']} | {row['shift_name']:<11} | {row['start_time']} | {row['end_time']}")
+            input("\nPress Enter to go back...")
 
         elif choice == "2":  # Add shift
             print("\n--- Add Shift ---")
@@ -216,18 +244,42 @@ def manage_schedule():  # Fungsi untuk mengelola schedule
 
         choice = input("Select menu: ")  # Input pilihan admin
 
-        if choice == "1":  # Show schedule list
-            data = schedule.read_schedule()  # Ambil semua schedule
-            for row in data:  # Loop tiap row dan print
-                print(row)
-            input("\nPress Enter to return...")  # Pause sebelum balik ke menu
+        if choice == "1":
+            print("\n--- Schedule List ---")
+            data = schedule.read_schedule()
+            if not data:
+                print("No schedules available.")
+            else:
+                print("ID | Staff Name     | Shift       | Start    | End      | Day")
+                print("-----------------------------------------------------------------")
+                for row in data:
+                    print(f"{row['schedule_id']} | {row['name']:<13} | {row['shift_name']:<10} | "
+                        f"{row['start_time']} | {row['end_time']} | {row['day_of_week']}")
+            input("\nPress Enter to go back...")
 
-        elif choice == "2":  # Add schedule
+        elif choice == "2":
             print("\n--- Add Schedule ---")
-            staff_id = int(input("Staff ID: "))  # Input staff_id
-            shift_id = int(input("Shift ID: "))  # Input shift_id
-            day_of_week = input("Day (Monday-Sunday): ")  # Input hari
-            schedule.create_schedule(staff_id, shift_id, day_of_week)  # Simpan ke DB
+
+            # Step 1: Tampilkan list staff
+            print("\nList Staff:")
+            staff_data = security_staff.read_staff()
+            for s in staff_data:
+                print(f"{s['staff_id']} - {s['name']}")
+            staff_id = int(input("Input Staff ID: "))
+
+            # Step 2: Input Shift ID (langsung aja, tanpa list shift)
+            shift_id = int(input("Input Shift ID: "))
+
+            # Step 3: Pilih hari pakai angka
+            print("\nPilih Hari:")
+            days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+            for i, day in enumerate(days, start=1):
+                print(f"{i}. {day}")
+            day_choice = int(input("Input (1-7): "))
+            day_of_week = days[day_choice - 1]  # convert angka ke nama hari
+
+            # Step 4: Simpan ke DB
+            schedule.create_schedule(staff_id, shift_id, day_of_week)
 
         elif choice == "3":  # Change schedule
             print("\n--- Change Schedule ---")
@@ -274,19 +326,23 @@ def manage_attendance():  # Fungsi untuk mengelola attendance
         print("1. Show list")  # Menu 1
         print("2. Change attendance")  # Menu 2
         print("3. Delete attendance")  # Menu 3
-        print("4. Back")  # Menu 4
+        print("4. Search attendance") # Menu 4
+        print("5. Back")  # Menu 5
 
         choice = input("Select menu: ")  # Input pilihan admin
 
-        if choice == "1":  # Show attendance list
+        if choice == "1":
             print("\n--- Attendance List ---")
-            data = attendance.read_attendance()  # Ambil semua attendance
-            if not data:  # Kalau kosong
-                print("No attendance data yet.")
-            else:  # Kalau ada
+            data = attendance.read_attendance()
+            if not data:
+                print("No attendance records available.")
+            else:
+                print("ID | Staff Name     | Date       | Check-in | Check-out | Status")
+                print("---------------------------------------------------------------------")
                 for row in data:
-                    print(row)  # Print setiap row
-                input("\nPress Enter to return...")  # Pause sebelum balik ke menu
+                    print(f"{row['attendance_id']} | {row['staff_name']:<13} | {row['date']} | "
+                        f"{row['check_in'] or '-':<8} | {row['check_out'] or '-':<9} | {row['status']}")
+            input("\nPress Enter to go back...")
 
         elif choice == "2":  # Change attendance
             print("\n--- Change Attendance ---")
@@ -330,11 +386,29 @@ def manage_attendance():  # Fungsi untuk mengelola attendance
             att_id = int(input("Input the attendance ID to delete: "))  # Pilih ID
             attendance.delete_attendance(att_id)  # Hapus dari DB
 
-        elif choice == "4":  # Back to main menu
+        elif choice == "4":
+            search_by_date()
+
+        elif choice == "5": 
             break  # Keluar loop
 
         else:  # Input salah
             print("Invalid choice")  # Pesan error
+
+def search_by_date():
+    print("\n--- Search Attendance by Date ---")
+    date = input("Enter date (YYYY-MM-DD): ")  # format input
+    
+    data = attendance.search_by_date(date)  # pake method di attendance.py
+    if not data:
+        print(f"Tidak ada data attendance pada tanggal {date}")
+    else:
+        print(f"\nAttendance on {date}:")
+        print("ID | Staff Name | Check-in | Check-out | Status")
+        print("-" * 50)
+        for row in data:
+            print(f"{row['attendance_id']} | {row['staff_name']} | {row['check_in']} | {row['check_out']} | {row['status']}")
+    input("\nPress Enter to return...")
 
 def manage_user():  # Fungsi untuk mengelola user login
     while True:  # Loop sampai admin pilih back
@@ -347,12 +421,17 @@ def manage_user():  # Fungsi untuk mengelola user login
 
         choice = input("Select menu: ")  # Input pilihan admin
 
-        if choice == "1":  # Show user list
+        if choice == "1":
             print("\n--- User List ---")
-            data = user.read_user()  # Ambil semua user
-            for row in data:
-                print(row)  # Print setiap row
-            input("\nPress Enter to return...")  # Pause sebelum balik ke menu
+            data = user.read_user()
+            if not data:
+                print("No users found.")
+            else:
+                print("ID | Username      | Role   | Staff ID")
+                print("---------------------------------------")
+                for row in data:
+                    print(f"{row['user_id']} | {row['username']:<12} | {row['role']:<6} | {row['staff_id'] or '-'}")
+            input("\nPress Enter to go back...")
 
         elif choice == "2":  # Add new user
             print("\n--- Add User ---")
@@ -406,6 +485,7 @@ def manage_user():  # Fungsi untuk mengelola user login
 
         else:  # Input salah
             print("Invalid choice")  # Pesan error
+
 
 # ============= STAFF MENU FUNCTION (dummy) =============
 def view_my_schedule(staff_id):

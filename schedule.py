@@ -32,18 +32,30 @@ class Schedule:
          print(f"Schedule for staff {staff_id}, shift {shift_id} on {day_of_week} has been added.")  # Cetak konfirmasi sukses
 
     
-    def read_schedule(self, staff_id):  # Fungsi untuk mengambil jadwal khusus untuk satu staff
-         """Get schedule for a specific staff"""
-         query = """
-         SELECT s.schedule_id, sh.shift_name, sh.start_time, sh.end_time, s.day_of_week
-         FROM schedule s
-         JOIN shift sh ON s.shift_id = sh.shift_id
-         WHERE s.staff_id = %s
-         ORDER BY FIELD(s.day_of_week,'Monday','Tuesday','Wednesday',
-                   'Thursday','Friday','Saturday','Sunday')
-         """  # SQL query ambil semua jadwal staff tertentu dan urutkan berdasarkan hari
-         rows = self.db.fetch_all(query, (staff_id,))  # Eksekusi query dengan parameter staff_id
-         return [self.format_schedule_row(r) for r in rows]  # Format kolom waktu dan kembalikan list hasil
+    def read_schedule(self, staff_id=None):
+        """Get schedule for specific staff or all schedules if staff_id not given"""
+        if staff_id:  # kalau ada staff_id, ambil jadwal 1 staff
+            query = """
+            SELECT s.schedule_id, sh.shift_name, sh.start_time, sh.end_time, s.day_of_week
+            FROM schedule s
+            JOIN shift sh ON s.shift_id = sh.shift_id
+            WHERE s.staff_id = %s
+            ORDER BY FIELD(s.day_of_week,'Monday','Tuesday','Wednesday',
+                    'Thursday','Friday','Saturday','Sunday')
+            """
+            rows = self.db.fetch_all(query, (staff_id,))
+        else:  # kalau ga ada staff_id, admin lihat semua
+            query = """
+            SELECT s.schedule_id, st.name, sh.shift_name, sh.start_time, sh.end_time, s.day_of_week
+            FROM schedule s
+            JOIN shift sh ON s.shift_id = sh.shift_id
+            JOIN security_staff st ON s.staff_id = st.staff_id
+            ORDER BY FIELD(s.day_of_week,'Monday','Tuesday','Wednesday',
+                    'Thursday','Friday','Saturday','Sunday')
+            """
+            rows = self.db.fetch_all(query)
+
+        return [self.format_schedule_row(r) for r in rows]
 
 
     def update_schedule(self, schedule_id, staff_id=None, shift_id=None, day_of_week=None):  # Update schedule data, bisa pilih field mana saja
